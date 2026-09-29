@@ -39,7 +39,7 @@ class EarthquakeRepository (
     suspend fun getAllEarthquakes(): List<EarthquakeEntity>{
         return dao.getAllEarthquakes()
     }
-    
+
     suspend fun getFilteredEarthquakes(
         startTime: Long,
         endTime: Long,
