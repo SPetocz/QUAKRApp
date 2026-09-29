@@ -56,7 +56,9 @@ fun MapScreen() {
 
             Box(
                 modifier = Modifier
-                    .size(width = 425.dp, height = 800.dp)
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
                     .clip(
                         RoundedCornerShape(30.dp))
                     .border(
