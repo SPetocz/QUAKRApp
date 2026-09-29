@@ -11,14 +11,18 @@ import org.maplibre.android.camera.CameraUpdateFactory
 private const val MAP_STYLE =
     "https://tiles.openfreemap.org/styles/liberty"
 
-private val DEFAULT_CAMERA = CameraPosition.Builder()
+val DEFAULT_CAMERA = CameraPosition.Builder()
     .target(LatLng(39.0, -95.5))
     .zoom(2.2)
+    .bearing(0.0)
+    .tilt(0.0)
     .build()
 
 @Composable
 
-fun EarthquakeMap(){
+fun EarthquakeMap(
+    onMapReady: (MapLibreMap) -> Unit
+){
 
     AndroidView(
         factory = { context ->
@@ -29,10 +33,15 @@ fun EarthquakeMap(){
                         map.uiSettings.apply {
                             isRotateGesturesEnabled = false
                             isTiltGesturesEnabled = false
+                            isZoomGesturesEnabled = true
+                            isScrollGesturesEnabled = true
                         }
-                        map.setMinZoomPreference(0.5)
-                        map.setMaxZoomPreference(5.0)
+                        map.setMinZoomPreference(1.0)
+                        map.setMaxZoomPreference(12.0)
+
+                        onMapReady(map)
                     }
+
                 }
             }
         }
