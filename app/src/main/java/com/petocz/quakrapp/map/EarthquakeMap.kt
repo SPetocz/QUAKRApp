@@ -23,7 +23,7 @@ private const val MAP_STYLE =
 
 val DEFAULT_CAMERA = CameraPosition.Builder()
     .target(LatLng(39.0, -95.5))
-    .zoom(2.2)
+    .zoom(1.9)
     .bearing(0.0)
     .tilt(0.0)
     .build()
