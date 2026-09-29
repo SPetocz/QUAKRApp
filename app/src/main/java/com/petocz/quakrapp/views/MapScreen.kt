@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.petocz.quakrapp.QuakrApplication
 import com.petocz.quakrapp.R
+import com.petocz.quakrapp.database.EarthquakeEntity
 import com.petocz.quakrapp.map.EarthquakeMap
 import com.petocz.quakrapp.ui.theme.*
 import com.petocz.quakrapp.map.*
@@ -51,6 +52,7 @@ fun MapScreen() {
     val context = LocalContext.current
     val application = context.applicationContext as QuakrApplication
 
+
     val viewModel: MapViewModel = viewModel(
         factory = MapViewModelFactory(
             application.earthquakeRepository
@@ -58,6 +60,9 @@ fun MapScreen() {
     )
 
     val earthquakes by viewModel.earthquakes.collectAsState()
+    var selectedEarthquake by remember {
+        mutableStateOf<EarthquakeEntity?>(null)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.loadEarthquakes()
@@ -214,10 +219,59 @@ fun MapScreen() {
             ) {
                 EarthquakeMap(
                     earthquakes = earthquakes,
-                    onMapReady = {
-                        map -> mapLibreMap = map
+                    onMapReady = { map ->
+                        mapLibreMap = map
+                    },
+                    onEarthquakeClick = { earthquake ->
+                        println("QUAKR: Selected earthquake = ${earthquake?.id}")
+                        selectedEarthquake = earthquake
                     }
                 )
+                selectedEarthquake?.let { earthquake ->
+
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .clip(RoundedCornerShape(24.dp))
+                            .background(Color.White)
+                            .padding(20.dp)
+                            .shadow(
+                                elevation = 0.dp,
+                            shape = RoundedCornerShape(24.dp)
+                            )
+                    ) {
+                        Column {
+                            Text(
+                                text = "Earthquake",
+                                fontSize = 24.sp,
+                                fontFamily = anton,
+                                color = Color.Black
+                            )
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            Text(
+                                text = "Magnitude: ${earthquake.magnitude ?: "Unknown"}",
+                                fontSize = 16.sp,
+                                color = Color.Black
+                            )
+
+                            Text(
+                                text = "Location: ${earthquake.place ?: "Unknown"}",
+                                fontSize = 16.sp,
+                                color = Color.Black
+                            )
+
+                            Text(
+                                text = "Depth: %.2f km".format(earthquake.depth),
+                                fontSize = 16.sp,
+                                color = Color.Black
+                            )
+                        }
+                    }
+                }
             }
             Spacer(
                 modifier = Modifier
