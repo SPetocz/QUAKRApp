@@ -10,7 +10,7 @@ class EarthquakeRepository (
     private val api: EarthquakeApi,
     private val dao: EarthquakeDao
 ){
-    suspend fun FetchAndStoreEarthquakes(
+    suspend fun fetchAndStoreEarthquakes(
         startTime: String,
         endTime: String,
         minMagnitude: Double = 1.0

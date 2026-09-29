@@ -11,6 +11,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,21 +27,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.petocz.quakrapp.QuakrApplication
 import com.petocz.quakrapp.R
 import com.petocz.quakrapp.map.EarthquakeMap
 import com.petocz.quakrapp.ui.theme.*
 import com.petocz.quakrapp.map.*
+import com.petocz.quakrapp.viewmodel.MapViewModel
+import com.petocz.quakrapp.viewmodel.MapViewModelFactory
 import org.maplibre.android.maps.MapLibreMap
 
 
 @Composable
 fun MapScreen() {
+
+    val context = LocalContext.current
+    val application = context.applicationContext as QuakrApplication
+
+    val viewModel: MapViewModel = viewModel(
+        factory = MapViewModelFactory(
+            application.earthquakeRepository
+        )
+    )
+
+    val earthquakes by viewModel.earthquakes.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadEarthquakes()
+    }
 
     var mapLibreMap by remember {
         mutableStateOf<MapLibreMap?>(null)
@@ -178,24 +200,30 @@ fun MapScreen() {
                     .weight(1f)
                     .padding(horizontal = 16.dp, vertical = 16.dp)
                     .clip(
-                        RoundedCornerShape(40.dp))
+                        RoundedCornerShape(15.dp))
                     .border(
                         width = 4.dp,
                         color = Color.White,
-                        shape = RoundedCornerShape(40.dp)
+                        shape = RoundedCornerShape(15.dp)
                     )
                     .shadow(
                         elevation = 4.dp,
-                        shape = RoundedCornerShape(40.dp)
+                        shape = RoundedCornerShape(15.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 EarthquakeMap(
+                    earthquakes = earthquakes,
                     onMapReady = {
                         map -> mapLibreMap = map
                     }
                 )
             }
+            Spacer(
+                modifier = Modifier
+                    .height(45.dp)
+                    .fillMaxWidth()
+            )
         }
     }
 }
