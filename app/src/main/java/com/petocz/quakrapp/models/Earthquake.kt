@@ -12,6 +12,7 @@ data class EarthquakeResponse(
 
 @Serializable
 data class Earthquake(
+    val id: String,
     val properties: EarthquakeProperties,
     val geometry: EarthquakeGeometry
 )
