@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.petocz.quakrapp.map.EarthquakeMap
 import com.petocz.quakrapp.ui.theme.*
 
 @Composable
@@ -60,20 +61,15 @@ fun MapScreen() {
                     .weight(1f)
                     .padding(horizontal = 16.dp, vertical = 16.dp)
                     .clip(
-                        RoundedCornerShape(30.dp))
+                        RoundedCornerShape(40.dp))
                     .border(
                         width = 4.dp,
                         color = Color.White,
-                        shape = RoundedCornerShape(30.dp)
+                        shape = RoundedCornerShape(40.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                    Text(
-                        text = "Map Goes Here",
-                        fontSize = 32.sp,
-                        fontFamily = anton,
-                        color = Color.White
-                    )
+                EarthquakeMap()
             }
         }
     }

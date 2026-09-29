@@ -13,31 +13,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.petocz.quakrapp.ui.theme.QUAKRAppTheme
 import com.petocz.quakrapp.views.MapScreen
+import org.maplibre.android.MapLibre
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
+
+        MapLibre.getInstance(this)
+
         enableEdgeToEdge()
         setContent {
             QUAKRAppTheme {
                 MapScreen()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    QUAKRAppTheme {
-        Greeting("Android")
     }
 }
