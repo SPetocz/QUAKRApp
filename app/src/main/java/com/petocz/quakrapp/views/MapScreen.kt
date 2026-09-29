@@ -18,11 +18,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -65,7 +69,14 @@ fun MapScreen() {
                 fontSize = 60.sp,
                 fontFamily = anton,
                 color = Color.White,
-                letterSpacing = 6.sp
+                letterSpacing = 6.sp,
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.Black,
+                        offset = Offset(4f, 4f),
+                        blurRadius = 4f
+                    )
+                )
             )
 
             Row(
@@ -79,10 +90,15 @@ fun MapScreen() {
                         //do something
                     },
                     modifier = Modifier
-                        .background(primary),
+                        .background(primary)
+                        .shadow(
+                            elevation = 4.dp,
+                            shape = RoundedCornerShape(40.dp)
+                        ),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White
-                    )
+                    ),
+
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.menu),
@@ -96,14 +112,18 @@ fun MapScreen() {
                         mapLibreMap?.let { resetMap(it) }
                     },
                     modifier = Modifier
-                        .background(primary),
+                        .background(primary)
+                        .shadow(
+                            elevation = 4.dp,
+                            shape = RoundedCornerShape(40.dp)
+                        ),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White
                     )
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.search),
-                        contentDescription = "menu bar",
+                        contentDescription = "search icon",
                         modifier = Modifier.size(30.dp),
                         tint = Color.Black
                     )
@@ -113,14 +133,18 @@ fun MapScreen() {
                         //do something
                     },
                     modifier = Modifier
-                        .background(primary),
+                        .background(primary)
+                        .shadow(
+                            elevation = 4.dp,
+                            shape = RoundedCornerShape(40.dp)
+                        ),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White
                     )
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.filter),
-                        contentDescription = "menu bar",
+                        contentDescription = "filter icon",
                         modifier = Modifier.size(30.dp),
                         tint = Color.Black
                     )
@@ -130,14 +154,18 @@ fun MapScreen() {
                         mapLibreMap?.let { resetMap(it) }
                     },
                     modifier = Modifier
-                        .background(primary),
+                        .background(primary)
+                        .shadow(
+                            elevation = 4.dp,
+                            shape = RoundedCornerShape(40.dp)
+                        ),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White
                     )
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.reset),
-                        contentDescription = "menu bar",
+                        contentDescription = "reset map icon",
                         modifier = Modifier.size(30.dp),
                         tint = Color.Black
                     )
@@ -154,6 +182,10 @@ fun MapScreen() {
                     .border(
                         width = 4.dp,
                         color = Color.White,
+                        shape = RoundedCornerShape(40.dp)
+                    )
+                    .shadow(
+                        elevation = 4.dp,
                         shape = RoundedCornerShape(40.dp)
                     ),
                 contentAlignment = Alignment.Center
