@@ -14,7 +14,7 @@ private val MIGRATION_1_2 = object : Migration(1,2){
                 syncId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 startTime INTEGER NOT NULL,
                 endTime INTEGER NOT NULL,
-                completedAt INTEGER NOT NULL
+                completedTime INTEGER NOT NULL
             )
             """.trimIndent()
         )

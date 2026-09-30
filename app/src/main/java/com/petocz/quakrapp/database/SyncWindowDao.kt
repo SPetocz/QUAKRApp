@@ -27,6 +27,21 @@ interface SyncWindowDao{
         endTime: Long
     ): SyncWindowEntity?
 
+
+    @Query(
+        """
+    SELECT * FROM earthquakes
+    WHERE time >= :startTime
+    AND time < :endTime
+    ORDER BY time DESC
+    """
+    )
+    suspend fun getEarthquakesForTimeRange(
+        startTime: Long,
+        endTime: Long
+    ): List<EarthquakeEntity>
+
+
     @Query("DELETE FROM sync_windows")
     suspend fun deleteAllSyncWindows()
 }

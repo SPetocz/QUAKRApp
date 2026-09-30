@@ -17,7 +17,22 @@ class MapViewModel(
 
     fun loadEarthquakes() {
         viewModelScope.launch {
-            _earthquakes.value = repository.getAllEarthquakes()
+
+            val startOfDay = java.time.LocalDate.now()
+                .atStartOfDay(java.time.ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli()
+
+            val startOfTomorrow = java.time.LocalDate.now()
+                .plusDays(1)
+                .atStartOfDay(java.time.ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli()
+
+            _earthquakes.value = repository.getEarthquakesForTimeRange(
+                startTime = startOfDay,
+                endTime = startOfTomorrow
+            )
         }
     }
 }

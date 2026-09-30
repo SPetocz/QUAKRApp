@@ -180,6 +180,7 @@ fun MapScreen() {
                     onClick = {
                         mapLibreMap?.let { resetMap(it) }
                         selectedEarthquake = null
+                        viewModel.loadEarthquakes()
                     },
                     modifier = Modifier
                         .background(primary)
@@ -261,6 +262,19 @@ fun MapScreen() {
 
                             Text(
                                 text = "Location: ${earthquake.place ?: "Unknown"}",
+                                fontSize = 16.sp,
+                                color = Color.Black
+                            )
+
+                            Text(
+                                text = "Time: ${
+                                    earthquake.time?.let {
+                                        java.text.SimpleDateFormat(
+                                            "MMM d, yyyy h:mm a",
+                                            java.util.Locale.getDefault()
+                                        ).format(java.util.Date(it))
+                                    } ?: "Unknown"
+                                }",
                                 fontSize = 16.sp,
                                 color = Color.Black
                             )

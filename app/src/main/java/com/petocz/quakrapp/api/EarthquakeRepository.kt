@@ -40,6 +40,16 @@ class EarthquakeRepository (
         return dao.getAllEarthquakes()
     }
 
+    suspend fun getEarthquakesForTimeRange(
+        startTime: Long,
+        endTime: Long
+    ): List<EarthquakeEntity> {
+        return dao.getEarthquakesForTimeRange(
+            startTime = startTime,
+            endTime = endTime
+        )
+    }
+
     suspend fun getFilteredEarthquakes(
         startTime: Long,
         endTime: Long,

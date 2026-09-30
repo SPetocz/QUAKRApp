@@ -4,6 +4,7 @@ import android.app.Application
 import com.petocz.quakrapp.api.EarthquakeApi
 import com.petocz.quakrapp.api.EarthquakeRepository
 import com.petocz.quakrapp.database.DatabaseProvider
+import com.petocz.quakrapp.sync.SyncScheduler
 
 class QuakrApplication: Application() {
 
@@ -18,5 +19,11 @@ class QuakrApplication: Application() {
             api = earthquakeApi,
             dao = database.earthquakeDao()
         )
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        SyncScheduler(this).schedule()
     }
 }

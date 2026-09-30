@@ -28,6 +28,19 @@ interface EarthquakeDao  {
         minMagnitude: Double
     ): List<EarthquakeEntity>
 
+    @Query(
+        """
+    SELECT * FROM earthquakes
+    WHERE time >= :startTime
+    AND time < :endTime
+    ORDER BY time DESC
+    """
+    )
+    suspend fun getEarthquakesForTimeRange(
+        startTime: Long,
+        endTime: Long
+    ): List<EarthquakeEntity>
+
     @Query("DELETE FROM earthquakes")
     suspend fun deleteAllEarthquakes()
 }
