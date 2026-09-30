@@ -7,4 +7,5 @@ fun resetMap(map: MapLibreMap){
         CameraUpdateFactory.newCameraPosition(DEFAULT_CAMERA),
         800
     )
+
 }

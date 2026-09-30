@@ -179,6 +179,7 @@ fun MapScreen() {
                 Button(
                     onClick = {
                         mapLibreMap?.let { resetMap(it) }
+                        selectedEarthquake = null
                     },
                     modifier = Modifier
                         .background(primary)
