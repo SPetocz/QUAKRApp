@@ -16,7 +16,7 @@ class QuakrApplication: Application() {
     val earthquakeRepository by lazy {
         EarthquakeRepository(
             api = earthquakeApi,
-            dao = database.EarthquakeDao()
+            dao = database.earthquakeDao()
         )
     }
 }
