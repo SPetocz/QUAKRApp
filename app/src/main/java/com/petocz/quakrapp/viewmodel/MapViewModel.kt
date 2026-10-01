@@ -35,6 +35,21 @@ class MapViewModel(
             )
         }
     }
+
+    fun loadFilteredEarthquakes(
+        startTime: Long,
+        endTime: Long,
+        minMagnitude: Double
+    ){
+        viewModelScope.launch {
+            _earthquakes.value = repository.getFilteredEarthquakes(
+                startTime = startTime,
+                endTime = endTime,
+                minMagnitude = minMagnitude
+                    )
+        }
+
+    }
 }
 
 class MapViewModelFactory(

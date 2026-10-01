@@ -52,7 +52,7 @@ fun EarthquakeMap(
                             isScrollGesturesEnabled = true
                         }
 
-                        map.setMinZoomPreference(1.0)
+                        map.setMinZoomPreference(0.5)
                         map.setMaxZoomPreference(12.0)
 
                         val features = earthquakes.map { earthquake ->
