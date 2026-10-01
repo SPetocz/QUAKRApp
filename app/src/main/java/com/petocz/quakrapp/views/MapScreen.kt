@@ -1,5 +1,6 @@
 package com.petocz.quakrapp.views
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -56,6 +57,8 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import java.time.Instant
@@ -205,7 +208,11 @@ fun MapScreen() {
                     onClick = {
                         showFilterView = false
                         selectedEarthquake = null
-                        resetFilters()
+                        Toast.makeText(
+                            context,
+                            "Feature Not Working Yet...",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         //do something
                     },
                     modifier = Modifier
@@ -228,10 +235,14 @@ fun MapScreen() {
                 }
                 Button(
                     onClick = {
-                        mapLibreMap?.let { resetMap(it) }
                         selectedEarthquake = null
                         showFilterView = false
-                        resetFilters()
+                        Toast.makeText(
+                            context,
+                            "Feature Not Working Yet...",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
 
                     },
                     modifier = Modifier
@@ -245,8 +256,8 @@ fun MapScreen() {
                     )
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.search),
-                        contentDescription = "search icon",
+                        painter = painterResource(R.drawable.location),
+                        contentDescription = "my location",
                         modifier = Modifier.size(30.dp),
                         tint = Color.Black
                     )
