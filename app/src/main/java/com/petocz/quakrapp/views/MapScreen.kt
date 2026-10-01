@@ -551,7 +551,7 @@ fun MapScreen() {
                                     onClick = {
 
                                         val startTime = dateToMillis(selectedStartDate)
-                                        val endTime = dateToMillis(selectedEndDate.plusDays(1)) - 1
+                                        val endTime = dateToMillis(selectedEndDate.plusDays(1))
 
                                         viewModel.loadFilteredEarthquakes(
                                             minMagnitude = selectedMinMagnitude,

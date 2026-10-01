@@ -19,13 +19,13 @@ class MapViewModel(
         viewModelScope.launch {
 
             val startOfDay = java.time.LocalDate.now()
-                .atStartOfDay(java.time.ZoneId.systemDefault())
+                .atStartOfDay(java.time.ZoneOffset.UTC)
                 .toInstant()
                 .toEpochMilli()
 
             val startOfTomorrow = java.time.LocalDate.now()
                 .plusDays(1)
-                .atStartOfDay(java.time.ZoneId.systemDefault())
+                .atStartOfDay(java.time.ZoneOffset.UTC)
                 .toInstant()
                 .toEpochMilli()
 

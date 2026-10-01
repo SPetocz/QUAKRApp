@@ -16,11 +16,12 @@ interface EarthquakeDao  {
 
     @Query(
         """
-            SELECT * FROM earthquakes
-            WHERE time BETWEEN :startTime  and :endTime
-            AND magnitude >= :minMagnitude
-            ORDER BY time DESC
-        """
+    SELECT * FROM earthquakes
+    WHERE time >= :startTime
+    AND time < :endTime
+    AND magnitude >= :minMagnitude
+    ORDER BY time DESC
+    """
     )
     suspend fun getFilteredEarthquakes(
         startTime: Long,
