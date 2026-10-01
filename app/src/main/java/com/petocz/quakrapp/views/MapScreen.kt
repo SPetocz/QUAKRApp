@@ -218,7 +218,7 @@ fun MapScreen() {
                         containerColor = Color.White
                     ),
 
-                ) {
+                    ) {
                     Icon(
                         painter = painterResource(R.drawable.menu),
                         contentDescription = "menu bar",
@@ -301,11 +301,34 @@ fun MapScreen() {
                 }
             }
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+            Text(
+                text = "EARTHQUAKES: ${earthquakes.size}",
+                fontFamily = anton,
+                fontSize = 28.sp,
+                letterSpacing = 2.sp,
+                color = Color.White,
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.Black,
+                        offset = Offset(4f, 4f),
+                        blurRadius = 4f
+                    )
+                )
+            )
+            }
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .padding(horizontal = 16.dp, vertical = 16.dp)
+                    .padding(bottom = 16.dp)
+                    .padding(horizontal = 16.dp)
                     .clip(
                         RoundedCornerShape(10.dp))
                     .border(
