@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("org.maplibre.gl:android-sdk:11.8.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

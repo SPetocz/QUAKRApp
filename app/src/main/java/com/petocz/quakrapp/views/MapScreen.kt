@@ -49,7 +49,6 @@ import com.petocz.quakrapp.viewmodel.MapViewModelFactory
 import org.maplibre.android.maps.MapLibreMap
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -61,6 +60,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.ui.Alignment
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -100,6 +100,9 @@ fun MapScreen() {
     var confirmedEndDate by remember {
         mutableStateOf(LocalDate.now())
     }
+    var showMenu by remember { mutableStateOf(false) }
+
+    var showAbout by remember { mutableStateOf(false) }
 
     fun confirmFilters() {
         confirmedMinMagnitude = selectedMinMagnitude
@@ -110,8 +113,6 @@ fun MapScreen() {
         showEndDatePicker = false
         showFilterView = false
 
-        // Eventually this is where we will apply
-        // the filters to your earthquake data.
     }
 
     fun cancelFilterChanges() {
@@ -206,14 +207,10 @@ fun MapScreen() {
             ) {
                 Button(
                     onClick = {
+                        showMenu = !showMenu
+                        showAbout = false
                         showFilterView = false
                         selectedEarthquake = null
-                        Toast.makeText(
-                            context,
-                            "Feature Not Working Yet...",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        //do something
                     },
                     modifier = Modifier
                         .background(primary)
@@ -237,13 +234,28 @@ fun MapScreen() {
                     onClick = {
                         selectedEarthquake = null
                         showFilterView = false
-                        Toast.makeText(
+                        showAbout = false
+                        showMenu = false
+
+                        mapLibreMap?.let { map ->
+                            getCachedLocation(
+                                context = context,
+                                onLocationReceived = { latitude, longitude ->
+                                    resetMap(map, latitude, longitude)
+                                },
+                                onError = { message ->
+                                    Toast.makeText(
+                                        context,
+                                        message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            )
+                        } ?: Toast.makeText(
                             context,
-                            "Feature Not Working Yet...",
+                            "Map is not ready yet.",
                             Toast.LENGTH_SHORT
                         ).show()
-
-
                     },
                     modifier = Modifier
                         .background(primary)
@@ -266,6 +278,8 @@ fun MapScreen() {
                     onClick = {
                         showFilterView = true
                         selectedEarthquake = null
+                        showMenu = false
+                        showAbout = false
                     },
                     modifier = Modifier
                         .background(primary)
@@ -289,6 +303,8 @@ fun MapScreen() {
                         mapLibreMap?.let { resetMap(it) }
                         selectedEarthquake = null
                         showFilterView = false
+                        showMenu = false
+                        showAbout = false
                         viewModel.loadEarthquakes()
                         resetFilters()
 
@@ -423,6 +439,78 @@ fun MapScreen() {
                     }
 
                 }
+                if (showMenu) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .shadow(
+                                elevation = 4.dp,
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color.White)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "MENU",
+                                fontSize = 28.sp,
+                                fontFamily = anton,
+                                color = primary,
+                                textAlign = TextAlign.Center
+                            )
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            MenuItem("Earthquake Logs") {
+                                showMenu = false
+                                Toast.makeText(
+                                    context,
+                                    "Earthquake Logs coming soon",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                            MenuItem("Settings") {
+                                showMenu = false
+                                Toast.makeText(
+                                    context,
+                                    "Settings coming soon",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                            MenuItem("About QUAKR") {
+                                    showMenu = false
+                                    showAbout = true
+                            }
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Button(
+                                onClick = { showMenu = false },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = primary
+                                )
+                            ) {
+                                Text(
+                                    text = "CLOSE MENU",
+                                    fontFamily = anton,
+                                    color = Color.White,
+                                    fontSize = 28.sp
+                                )
+                            }
+                        }
+                    }
+                }
+
                 if(showFilterView){
                     Box(
                         modifier = Modifier
@@ -618,7 +706,19 @@ fun MapScreen() {
                     .fillMaxWidth()
             )
         }
-        // START DATE PICKER
+        if (showAbout) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth()
+            ) {
+                AboutQuakrOverlay(
+                    onClose = {
+                        showAbout = false
+                    }
+                )
+            }
+        }
         if (showStartDatePicker) {
 
             val datePickerState = rememberDatePickerState(
@@ -638,7 +738,6 @@ fun MapScreen() {
                             .atZone(ZoneOffset.UTC)
                             .toLocalDate()
 
-                        // Cannot select a future date
                         return !selectedDate.isAfter(LocalDate.now())
                     }
                 }
@@ -660,9 +759,7 @@ fun MapScreen() {
                                     .atZone(ZoneOffset.UTC)
                                     .toLocalDate()
 
-                                // If the new start date is after
-                                // the current end date, move the end date
-                                // to the new start date.
+
                                 if (selectedEndDate.isBefore(selectedStartDate)) {
                                     selectedEndDate = selectedStartDate
                                 }
@@ -692,7 +789,7 @@ fun MapScreen() {
         }
 
 
-// END DATE PICKER
+
         if (showEndDatePicker) {
 
             val datePickerState = rememberDatePickerState(
@@ -712,8 +809,6 @@ fun MapScreen() {
                             .atZone(ZoneOffset.UTC)
                             .toLocalDate()
 
-                        // Cannot select before the start date
-                        // or after today.
                         return !selectedDate.isBefore(selectedStartDate) &&
                                 !selectedDate.isAfter(LocalDate.now())
                     }
@@ -762,6 +857,120 @@ fun MapScreen() {
 
     }
 }
+
+@Composable
+fun MenuItem(
+    title: String,
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(vertical = 14.dp)
+    ) {
+        Text(
+            text = title,
+            fontSize = 18.sp,
+            color = Color.Black
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(Color.LightGray)
+        )
+    }
+}
+
+@Composable
+fun AboutQuakrOverlay(
+    onClose: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 195.dp)
+            .padding(16.dp)
+            .shadow(
+                elevation = 4.dp,
+                shape = RoundedCornerShape(10.dp)
+            )
+            .clip(RoundedCornerShape(10.dp))
+            .background(Color.White)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "ABOUT QUAKR",
+                fontSize = 28.sp,
+                fontFamily = anton,
+                color = primary,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "QUAKR is an earthquake exploration app " +
+                        "that helps users view recent earthquake " +
+                        "activity, explore epicenters on a map, and " +
+                        "compare earthquakes by magnitude and date.",
+                fontSize = 16.sp,
+                color = Color.Black,
+                textAlign = TextAlign.Left
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "TECHNOLOGY",
+                fontSize = 20.sp,
+                fontFamily = anton,
+                color = primary,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "QUAKR is built with Kotlin and Jetpack " +
+                        "Compose for Android. Earthquake data comes " +
+                        "from the USGS Earthquake API, while MapLibre " +
+                        "and OpenStreetMap-based map data provide the " +
+                        "map experience. Room stores earthquake data " +
+                        "locally on the device.",
+                fontSize = 16.sp,
+                color = Color.Black,
+                textAlign = TextAlign.Left
+            )
+
+            Spacer(modifier = Modifier.height(38.dp))
+
+            Button(
+                onClick = onClose,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = primary
+                )
+            ) {
+                Text(
+                    text = "CLOSE",
+                    fontFamily = anton,
+                    color = Color.White
+                )
+            }
+        }
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
